@@ -350,9 +350,43 @@ namespace Advent_of_Code_2022
         public static void Day6()
         {
             string readText = File.ReadAllText("Day6.txt");
-
+            int step1 = 0;int step2 = 0;
+            for(int i = 3; i < readText.Length; i++)
+            {
+                if (readText[i] != readText[i - 1] && readText[i] != readText[i - 2] && readText[i] != readText[i - 3])
+                    if (readText[i - 1] != readText[i] && readText[i - 1] != readText[i - 2] && readText[i - 1] != readText[i - 3])
+                        if (readText[i - 2] != readText[i - 1] && readText[i - 2] != readText[i] && readText[i - 2] != readText[i - 3])
+                            if (readText[i - 3] != readText[i - 1] && readText[i-3] != readText[i - 2] && readText[i-3] != readText[i])
+                            {
+                                step1 = i + 1;
+                                break;
+                            }
+            }            
+            for (int i = 0; i < readText.Length; i++)
+            {
+                if (step2 > 0) break;
+                int check = 0;
+                for(int j=0; j < 14; j++)
+                {
+                    check = 0;
+                    for (int k = 0; k < 14; k++)
+                    {                        
+                        if(readText[i+j] == readText[i+k] && i+j!=i+k)
+                        {
+                            check = 1;
+                            break;
+                        }                        
+                    }
+                if (check == 1)
+                {
+                   break;
+                }
+                else if (j == 13) step2 = i + 14;
+                }
+            }
             Console.WriteLine();
-            Console.Write(" Step1 result ");
+            Console.WriteLine();
+            Console.WriteLine("Step1 result "+step1+" step2 result "+step2);
         }
 
         static void Main(string[] args)
