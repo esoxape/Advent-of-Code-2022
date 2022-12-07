@@ -1,10 +1,31 @@
 ﻿using System.Diagnostics.Metrics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Intrinsics.X86;
 using System.Xml.XPath;
 
 namespace Advent_of_Code_2022
 {
+    public class Dir
+    {
+        public int dirNo;
+        public int pDir;
+        public string dir = "";
+        public List<int> upDir = new List<int>();
+        public List<Fil> files=new List<Fil>();
+        public void Print()
+        {
+            for(int i=0; i<files.Count();i++)
+            {
+                Console.WriteLine(files[i].name+" "+files[i].size);
+            }
+        }
+    }
+    public class Fil
+    {
+        public int size;
+        public string name = "";
+    }
     internal class Program
     {
         public static void Day1()
@@ -388,7 +409,114 @@ namespace Advent_of_Code_2022
             Console.WriteLine();
             Console.WriteLine("Step1 result "+step1+" step2 result "+step2);
         }
+        public static void Day7()
+        {
+            String[] data = File.ReadAllLines("Day7.txt");
+            List<Dir> struktur = new List<Dir>();
+            Dir M = new Dir();
+            int currentDir = 0;
+            int[] allSizes = new int[10000];
+            int counter = 0;
+            struktur.Add(M);
+            struktur[0].dir = "/";
+            struktur[0].pDir = 0;
+            struktur[0].dirNo = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                String[] instructions = data[i].Split(' ');
+                for(int j = 0; j < instructions.Length; j++)
+                {
+                    if(instructions[j] == "cd")
+                    {
+                        for(int k = 0; k < struktur.Count(); k++)
+                        {                            
+                            if (instructions[j + 1]=="..")
+                            {                                
+                                currentDir = struktur[currentDir].pDir;
+                                break;
+                            }
+                            else if(struktur[currentDir].dir + instructions[j + 1]+"/" == struktur[k].dir)
+                            {                                
+                                currentDir = struktur[k].dirNo;
+                                break;
+                            }
+                        }
+                    }
+                    if(instructions[j] == "dir")
+                    {
+                        struktur[currentDir].upDir.Add(struktur.Count());
+                        M = new Dir();
+                        M.dir = struktur[currentDir].dir + instructions[j+1]+"/";
+                        M.pDir = currentDir;
+                        M.dirNo=struktur.Count();
+                        struktur.Add(M);
+                    }
+                    int a;
+                    if (int.TryParse(instructions[j],out a) == true)
+                    {
+                        Fil F = new Fil();
+                        F.size = int.Parse(instructions[j]);
+                        F.name = instructions[j+1];
+                        struktur[currentDir].files.Add(F);
+                    }
+                }
+            }
+            int result = 0;
+            for(int i= struktur.Count()-1; i>-1;i--)
+            {
+                struktur[struktur[i].pDir].upDir.AddRange(struktur[struktur[i].dirNo].upDir);
+            }
+            struktur[0].upDir.Sort();
+            for(int i=0; i< struktur[0].upDir.Count();i++)
+            {
+                if (struktur[0].upDir[i] == struktur[0].upDir[i])
+                {
+                    struktur[0].upDir.RemoveAt(i);
+                }
+            }
+            for(int i=0; i< struktur[0].upDir.Count();i++)
+            {
+                Console.WriteLine(struktur[0].upDir[i]);
+            }
+            for (int i = 0; i<struktur.Count(); i++)
+            {                
+                int max = 0;
 
+                for (int k = 0; k < struktur[i].files.Count(); k++)
+                {
+                    max = max + struktur[i].files[k].size;
+                }                
+
+                for (int j = 0; j < struktur[i].upDir.Count(); j++)
+                {  
+                    for(int k = 0; k < struktur[struktur[i].upDir[j]].files.Count(); k++)
+                    {   
+                        max = max+ struktur[struktur[i].upDir[j]].files[k].size;
+                    }
+                }
+                if (i == 0) Console.WriteLine(max);
+                allSizes[counter] = max;                
+                counter++;
+                if (max < 100001) result = result + max;
+            }
+            int maxx = 0;
+            for (int i = 0; i < allSizes.Length; i++)
+            {
+                if (allSizes[i] > maxx) maxx = allSizes[i];
+                if (allSizes[i] == 0) break;
+            }
+            int space = 70000000-maxx;
+            int plats = 30000000 - space;
+            double result2= 70000000;            
+            for (int i = 0; i<allSizes.Length; i++)
+            {                
+                if (allSizes[i]> plats && allSizes[i]<result2) result2=allSizes[i];
+                if (allSizes[i] == 0) break;
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Step1 result "+result+ " Step2 result " + result2);
+        }
         static void Main(string[] args)
         {            
             Day1();
@@ -398,6 +526,8 @@ namespace Advent_of_Code_2022
             Day5();
             Day5PartTwo();
             Day6();
+            Day7();
+            
         }
     }
 }
