@@ -474,10 +474,6 @@ namespace Advent_of_Code_2022
                     struktur[0].upDir.RemoveAt(i);
                 }
             }
-            for(int i=0; i< struktur[0].upDir.Count();i++)
-            {
-                Console.WriteLine(struktur[0].upDir[i]);
-            }
             for (int i = 0; i<struktur.Count(); i++)
             {                
                 int max = 0;
@@ -493,8 +489,7 @@ namespace Advent_of_Code_2022
                     {   
                         max = max+ struktur[struktur[i].upDir[j]].files[k].size;
                     }
-                }
-                if (i == 0) Console.WriteLine(max);
+                }                
                 allSizes[counter] = max;                
                 counter++;
                 if (max < 100001) result = result + max;
@@ -504,17 +499,15 @@ namespace Advent_of_Code_2022
             {
                 if (allSizes[i] > maxx) maxx = allSizes[i];
                 if (allSizes[i] == 0) break;
-            }
-            int space = 70000000-maxx;
-            int plats = 30000000 - space;
+            }                        
             double result2= 70000000;            
             for (int i = 0; i<allSizes.Length; i++)
             {                
-                if (allSizes[i]> plats && allSizes[i]<result2) result2=allSizes[i];
+                if (allSizes[i]> 30000000-(70000000 - maxx) && allSizes[i]<result2) result2=allSizes[i];
                 if (allSizes[i] == 0) break;
             }
             Console.WriteLine();
-            Console.WriteLine();
+            Console.WriteLine("Day7");
             Console.WriteLine("Step1 result "+result+ " Step2 result " + result2);
         }
         static void Main(string[] args)
