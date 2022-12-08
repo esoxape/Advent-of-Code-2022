@@ -620,8 +620,8 @@ namespace Advent_of_Code_2022
                 }
             }
             Console.WriteLine();
-            Console.WriteLine("Day7");
-            Console.WriteLine("Step1 result "+step1);
+            Console.WriteLine("Day8");
+            Console.Write("Step1 result "+step1+" ");
         }
         public static void Day8PartTwo()
         {
