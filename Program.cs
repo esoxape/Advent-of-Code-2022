@@ -510,6 +510,202 @@ namespace Advent_of_Code_2022
             Console.WriteLine("Day7");
             Console.WriteLine("Step1 result "+result+ " Step2 result " + result2);
         }
+        public static void Day8()
+        {
+            String[] data = File.ReadAllLines("Day8.txt");
+            int step1 = 0;            
+            bool[,] check = new bool[99, 99];
+            int[,] checkValue=new int[99,99];            
+            //populate visible/invisible trees and tree height 
+            for (int i = 0; i < check.GetLength(0); i++)
+            {
+                for(int j = 0; j < check.GetLength(1); j++)
+                {
+                    if (i == 0 || j == 0 || i == check.GetLength(0) - 1 || j == check.GetLength(1) - 1) check[i, j] = true;                     
+                    else check[i, j] = false;
+                    checkValue[i, j] = int.Parse(data[i][j].ToString());
+                }                
+            }                      
+            //check left to right
+            for (int i=1; i < check.GetLength(0)-1; i++)
+            {
+                for( int j = 1; j < check.GetLength(1)-1; j++)
+                {
+                    if (checkValue[i,j]> checkValue[i,j-1])
+                    {                        
+                        check[i, j] = true;
+                    }
+                    if(checkValue[i, j] < checkValue[i, j - 1])
+                    {
+                        checkValue[i, j] = checkValue[i, j - 1];
+                    }
+                }
+            }
+            //repopulate tree heights
+            for (int i = 0; i < check.GetLength(0); i++)
+            {
+                for (int j = 0; j < check.GetLength(1); j++)
+                {
+                    checkValue[i, j] = int.Parse(data[i][j].ToString());
+                }
+            }
+            //check from top
+            for (int i = 1; i < check.GetLength(0) - 1; i++)
+            {
+                for (int j = 1; j < check.GetLength(1) - 1; j++)
+                {
+                    if (checkValue[i, j] > checkValue[i-1, j])
+                    {
+                        check[i, j] = true;
+                    }
+                    if (checkValue[i, j] < checkValue[i-1, j])
+                    {
+                        checkValue[i, j] = checkValue[i-1, j];
+                    }
+                }
+            }
+            //repopulate tree heights
+            for (int i = 0; i < check.GetLength(0); i++)
+            {
+                for (int j = 0; j < check.GetLength(1); j++)
+                {
+                    checkValue[i, j] = int.Parse(data[i][j].ToString());
+                }
+            }
+            //check from right
+            for (int i = check.GetLength(0) - 2; i > 0; i--)
+            {
+                for (int j = check.GetLength(1)-2; j > 0; j--)
+                {
+                    if (checkValue[i, j] > checkValue[i, j+1])
+                    {
+                        check[i, j] = true;
+                    }
+                    if (checkValue[i, j] < checkValue[i, j+1])
+                    {
+                        checkValue[i, j] = checkValue[i, j+1];
+                    }
+                }
+            }
+            //repopulate tree heights
+            for (int i = 0; i < check.GetLength(0); i++)
+            {
+                for (int j = 0; j < check.GetLength(1); j++)
+                {
+                    checkValue[i, j] = int.Parse(data[i][j].ToString());
+                }
+            }
+            //check from bottom
+            for (int i = check.GetLength(0) - 2; i > 0; i--)
+            {
+                for (int j = check.GetLength(1) - 2; j > 0; j--)
+                {
+                    if (checkValue[i, j] > checkValue[i+1, j])
+                    {
+                        check[i, j] = true;
+                    }
+                    if (checkValue[i, j] < checkValue[i+1, j])
+                    {
+                        checkValue[i, j] = checkValue[i+1, j];
+                    }
+                }
+            }
+
+            //calculate how many visible trees
+            for (int i = 0; i < check.GetLength(0); i++)
+            {
+                for (int j = 0; j < check.GetLength(1); j++)
+                {
+                    if (check[i, j] == true) step1++;
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("Day7");
+            Console.WriteLine("Step1 result "+step1);
+        }
+        public static void Day8PartTwo()
+        {
+            String[] data = File.ReadAllLines("Day8.txt");
+            int step2 = 0;            
+            int[,] checkValue = new int[99, 99];
+            int[,] resultN = new int[99, 99];
+            int[,] resultE = new int[99, 99];
+            int[,] resultS = new int[99, 99];
+            int[,] resultW = new int[99, 99];
+            //populate  tree height 
+            for (int i = 0; i < checkValue.GetLength(0); i++)
+            {
+                for (int j = 0; j < checkValue.GetLength(1); j++)
+                {
+                    checkValue[i, j] = int.Parse(data[i][j].ToString());
+                }
+            }
+            //check all directions
+            int x = 0;
+            int y=0;
+            for(int i=0; i < checkValue.Length; i++)
+            {                
+                if (x == 99) y++;
+                if (x == 99) x = 0;
+                int savey = y;
+                int savex = x;
+                for (int j = x+1; j < checkValue.GetLength(0); j++)
+                {                      
+                    if (checkValue[x, y] > checkValue[j, y]) resultS[x, y]++;
+                    else if(checkValue[x, y] <= checkValue[j, y])
+                    {
+                        resultS[x, y]++;
+                        break;
+                    }
+                }
+                x = savex;
+                y = savey;
+                for (int j = y+1; j < checkValue.GetLength(0); j++)
+                {
+                    if (checkValue[x, y] > checkValue[x, j]) resultE[x, y]++;
+                    else if (checkValue[x, y] <= checkValue[x, j])
+                    {
+                        resultE[x, y]++;
+                        break;
+                    }
+                }
+                x = savex;
+                y = savey;
+                for (int j = x - 1; j > -1 ; j--)
+                {
+                    if (checkValue[x, y] > checkValue[j, y]) resultN[x, y]++;
+                    else if (checkValue[x, y] <= checkValue[j, y])
+                    {
+                        resultN[x, y]++;
+                        break;
+                    }
+                }
+                x = savex;
+                y = savey;
+                for (int j = y - 1; j > -1; j--)
+                {                    
+                    if (checkValue[x, y] > checkValue[x, j]) resultW[x, y]++;
+                    else if (checkValue[x, y] <= checkValue[x, j])
+                    {
+                        resultW[x, y]++;
+                        break;
+                    }
+                }
+                x++;                
+            }
+
+            int svar = 0;
+
+            //find highest scenic score
+            for (int i = 0; i < checkValue.GetLength(0); i++)
+            {
+                for (int j = 0; j < checkValue.GetLength(1); j++)
+                {
+                    if (svar < resultN[i, j] * resultE[i, j] * resultS[i, j] * resultW[i, j]) svar = resultN[i, j] * resultE[i, j] * resultS[i, j] * resultW[i, j];
+                }
+            }            
+            Console.Write("Step2 "+svar);
+        }
         static void Main(string[] args)
         {            
             Day1();
@@ -520,7 +716,8 @@ namespace Advent_of_Code_2022
             Day5PartTwo();
             Day6();
             Day7();
-            
+            Day8();
+            Day8PartTwo();
         }
     }
 }
