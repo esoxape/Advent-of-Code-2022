@@ -710,8 +710,7 @@ namespace Advent_of_Code_2022
         {
             String[] data = File.ReadAllLines("Day9.txt");
             bool[,] visited = new bool[1000, 1000];
-            bool[,] visited2 = new bool[1000, 1000];           
-            int[] savePos = new int[18];
+            bool[,] visited2 = new bool[1000, 1000];
             int[] head = { 500, 500 };
             int[] tail= { 500, 500,500, 500,500, 500, 500, 500,500, 500, 500, 500, 500, 500, 500, 500, 500, 500, };            
             int step1 = 0;
@@ -725,10 +724,6 @@ namespace Advent_of_Code_2022
                 {
                     for (int j = 0; j < int.Parse(check[1]); j++)
                     {
-                        for(int a=0; a<16; a++)
-                        {
-                            savePos[a] = tail[a];
-                        }
                         head[0] = head[0] - 1;
                         if (head[0] < tail[0] - 1)
                         {                            
@@ -790,10 +785,6 @@ namespace Advent_of_Code_2022
                 {
                     for (int j = 0; j < int.Parse(check[1]); j++)
                     {
-                        for (int a = 0; a < 16; a++)
-                        {
-                            savePos[a] = tail[a];
-                        }
                         head[1] = head[1] + 1;
                         if (head[1] > tail[1] + 1)
                         {                            
@@ -855,10 +846,6 @@ namespace Advent_of_Code_2022
                 {
                     for (int j = 0; j < int.Parse(check[1]); j++)
                     {
-                        for (int a = 0; a < 16; a++)
-                        {
-                            savePos[a] = tail[a];
-                        }
                         head[0] = head[0] + 1;
                         if (head[0] > tail[0] + 1)
                         {                            
@@ -920,10 +907,6 @@ namespace Advent_of_Code_2022
                 {
                     for (int j = 0; j < int.Parse(check[1]); j++)
                     {
-                        for (int a = 0; a < 16; a++)
-                        {
-                            savePos[a] = tail[a];
-                        }
                         head[1] = head[1] - 1;
                         if (head[1] < tail[1] - 1)
                         {                            
