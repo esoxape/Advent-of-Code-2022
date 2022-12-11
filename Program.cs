@@ -891,8 +891,120 @@ namespace Advent_of_Code_2022
             for (int i = 0; i < crt.Length; i++)
             {
                 if (i % 40 == 0 && i != 0) Console.WriteLine();
-                Console.Write(crt[i]);
+                if(i!=crt.Length-1)Console.Write(crt[i]);
             }
+        }
+        public class Monkey
+        {
+            public List<long> items = new List<long>();
+            public int divisible;
+            public int op1;
+            public int op2;
+            public string operand="";
+            public int trueThrow;
+            public int falseThrow;
+            public long counter = 0;
+        }
+        public static void Day11()
+        {
+            String[] data = File.ReadAllLines("Day11.txt");
+            long step1 = 0;
+            long step2 = 0;
+            int modulus = 1;
+            List<Monkey> monkeys = new List<Monkey>();
+            List<Monkey> monkeys2 = new List<Monkey>();
+            for (int i = 0; i < data.Length; i = i + 7)
+            {
+                Monkey M = new Monkey();
+                string[] info = data[i + 1].Split(':', ',');
+                for (int j = 1; j < info.Length; j++)
+                {
+                    M.items.Add(int.Parse(info[j]));
+                }
+                string[] info2 = data[i + 2].Split('=', ' ');                
+                if (info2[6] == "old") M.op1 = -1;
+                else M.op1 = int.Parse(info2[6]);
+                M.operand = info2[7];
+                if (info2[8] == "old") M.op2 = -1;
+                else M.op2 = int.Parse(info2[8]);
+                string[] info3 = data[i + 3].Split(' ');
+                M.divisible = int.Parse(info3[5]);
+                modulus *= M.divisible;
+                string[] info4 = data[i + 4].Split(' ');
+                M.trueThrow = int.Parse(info4[9]);                
+                string[] info5 = data[i + 5].Split(' ');
+                M.falseThrow = int.Parse(info5[9]);                
+                monkeys.Add(M);
+            }
+            for (int i = 0; i < 20; i++)
+            {                
+                for (int j = 0; j < monkeys.Count(); j++)
+                {
+                    for (int k = 0; k < monkeys[j].items.Count(); k++)
+                    {
+                        monkeys[j].counter++;
+                        long worry = 0;
+                        if (monkeys[j].operand == "*" && monkeys[j].op1 == -1 && monkeys[j].op2 != -1) worry = monkeys[j].items[k] * monkeys[j].op2;
+                        if (monkeys[j].operand == "*" && monkeys[j].op1 == -1 && monkeys[j].op2 == -1) worry = monkeys[j].items[k] * monkeys[j].items[k];
+                        if (monkeys[j].operand == "+" && monkeys[j].op1 == -1) worry = monkeys[j].items[k] + monkeys[j].op2;
+                        worry = worry / 3;
+                        if (worry % monkeys[j].divisible == 0)
+                        {
+                            monkeys[monkeys[j].trueThrow].items.Add(worry);                            
+                        }
+                        else
+                        {
+                            monkeys[monkeys[j].falseThrow].items.Add(worry);                            
+                        }                        
+                    }
+                    monkeys[j].items.Clear();
+                }
+            }            
+            long highest = 0;
+            for (int i = 0; i < monkeys.Count(); i++)
+            {                
+                if (monkeys[i].counter > highest)
+                {
+                    step1 = monkeys[i].counter * highest;
+                    highest = monkeys[i].counter;
+                }
+            }            
+            for (int i = 0; i < 10000; i++)
+            {
+                for (int j = 0; j < monkeys2.Count(); j++)
+                {
+                    for (int k = 0; k < monkeys2[j].items.Count(); k++)
+                    {
+                        long worry = 0;
+                        monkeys2[j].counter++;
+                        if (monkeys2[j].operand == "*" && monkeys2[j].op1 == -1 && monkeys2[j].op2 != -1) worry = monkeys2[j].items[k] * monkeys2[j].op2;
+                        if (monkeys2[j].operand == "*" && monkeys2[j].op1 == -1 && monkeys2[j].op2 == -1) worry = monkeys2[j].items[k] * monkeys2[j].items[k];
+                        if (monkeys2[j].operand == "+" && monkeys2[j].op1 == -1) worry = monkeys2[j].items[k] + monkeys2[j].op2;
+                        worry = worry % modulus;
+                        if (worry % monkeys2[j].divisible == 0)
+                        {
+                            monkeys2[monkeys2[j].trueThrow].items.Add(worry);
+                        }
+                        else
+                        {
+                            monkeys2[monkeys2[j].falseThrow].items.Add(worry);
+                        }
+                    }
+                    monkeys2[j].items.Clear();
+                }
+            }
+            highest = 0;
+            for (int i = 0; i < monkeys2.Count(); i++)
+            {
+                if (monkeys2[i].counter > highest)
+                {
+                    step2 = monkeys2[i].counter * highest;
+                    highest = monkeys2[i].counter;
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("Day11");
+            Console.Write("Step1 " + step1+" step2 "+step2);
         }
         static void Main(string[] args)
         {
@@ -908,6 +1020,7 @@ namespace Advent_of_Code_2022
             Day8PartTwo();
             Day9();
             Day10();
+            Day11();            
         }
     }
 }
