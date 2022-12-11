@@ -859,7 +859,7 @@ namespace Advent_of_Code_2022
         public static void Day10()
         {
             String[] data = File.ReadAllLines("Day10.txt");
-            int step1 = 0;int step2 = 0;
+            int step1 = 0;
             int x = 1;
             int cycle = 0;
             string crt="";
@@ -883,15 +883,16 @@ namespace Advent_of_Code_2022
                     step1 = step1 + CycleCheck(cycle,x);
                     crt = crt + CrtCheck(crt, cycle, x);
                 }
-            }
-            for(int i = 0; i < crt.Length; i++)
-            {
-                if (i % 40 == 0 && i != 0) Console.WriteLine();
-                Console.Write(crt[i]);                
-            }            
+            }       
             Console.WriteLine();
             Console.WriteLine("Day10");
-            Console.WriteLine("Step1 " + step1 + " Step2 " + step2);
+            Console.WriteLine("Step1 " + step1 + " Step2 ");
+            Console.WriteLine();
+            for (int i = 0; i < crt.Length; i++)
+            {
+                if (i % 40 == 0 && i != 0) Console.WriteLine();
+                Console.Write(crt[i]);
+            }
         }
         static void Main(string[] args)
         {
