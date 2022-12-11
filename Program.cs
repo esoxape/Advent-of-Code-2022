@@ -835,6 +835,64 @@ namespace Advent_of_Code_2022
             Console.WriteLine("Day9");
             Console.WriteLine("Step1 " + step1 + " Step2 " + step2);
         }
+        public static int CycleCheck(int cycle, int x)
+        {
+            cycle = cycle + 1;
+            if (cycle == 20) return cycle * x;
+            if (cycle == 60) return cycle * x;
+            if (cycle == 100) return cycle * x;
+            if (cycle == 140) return cycle * x;
+            if (cycle == 180) return cycle * x;
+            if (cycle == 220) return cycle * x;
+            return 0;
+        }
+        public static string CrtCheck(string crt, int cycle, int x)
+        {            
+            if (crt.Length<40 && cycle == x || x == cycle - 1 || x == cycle + 1) return "#";
+            else if (crt.Length < 80 && cycle-40 == x || x == cycle-40 - 1 || x == cycle-40 + 1) return "#";
+            else if (crt.Length < 120 && cycle-80 == x || x == cycle-80 - 1 || x == cycle-80 + 1) return "#";
+            else if (crt.Length < 160 && cycle-120 == x || x == cycle - 120 - 1 || x == cycle - 120 + 1) return "#";
+            else if (crt.Length < 200 && cycle == x - 160 || x == cycle - 160-1 || x == cycle - 160 + 1) return "#";
+            else if (crt.Length < 240 && cycle - 200 == x || x == cycle - 200 - 1 || x == cycle - 200 + 1) return "#";
+            else return ".";
+        }
+        public static void Day10()
+        {
+            String[] data = File.ReadAllLines("Day10.txt");
+            int step1 = 0;int step2 = 0;
+            int x = 1;
+            int cycle = 0;
+            string crt="";
+            for(int i = 0; i < data.Length; i++)
+            {
+                if(i==0) crt = crt + CrtCheck(crt, cycle, x);
+                string[] check = data[i].Split(" ");                                
+                if (check[0] == "noop")
+                {                    
+                    cycle++;
+                    step1 = step1 + CycleCheck(cycle, x);
+                    crt = crt + CrtCheck(crt, cycle, x);
+                }
+                if (check[0]=="addx")
+                {                  
+                    cycle++;
+                    step1 = step1 + CycleCheck(cycle,x);
+                    crt = crt + CrtCheck(crt, cycle, x);                    
+                    cycle++;
+                    x = x + int.Parse(check[1]);
+                    step1 = step1 + CycleCheck(cycle,x);
+                    crt = crt + CrtCheck(crt, cycle, x);
+                }
+            }
+            for(int i = 0; i < crt.Length; i++)
+            {
+                if (i % 40 == 0 && i != 0) Console.WriteLine();
+                Console.Write(crt[i]);                
+            }            
+            Console.WriteLine();
+            Console.WriteLine("Day10");
+            Console.WriteLine("Step1 " + step1 + " Step2 " + step2);
+        }
         static void Main(string[] args)
         {
             Day1();
@@ -848,6 +906,7 @@ namespace Advent_of_Code_2022
             Day8();
             Day8PartTwo();
             Day9();
+            Day10();
         }
     }
 }
