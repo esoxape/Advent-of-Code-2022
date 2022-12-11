@@ -935,6 +935,7 @@ namespace Advent_of_Code_2022
                 string[] info5 = data[i + 5].Split(' ');
                 M.falseThrow = int.Parse(info5[9]);                
                 monkeys.Add(M);
+                monkeys2.Add(M);
             }
             for (int i = 0; i < 20; i++)
             {                
