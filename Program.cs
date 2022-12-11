@@ -712,7 +712,7 @@ namespace Advent_of_Code_2022
             bool[,] visited = new bool[1000, 1000];
             bool[,] visited2 = new bool[1000, 1000];
             int[] head = { 500, 500 };
-            int[] tail= { 500, 500,500, 500,500, 500, 500, 500,500, 500, 500, 500, 500, 500, 500, 500, 500, 500, };            
+            int[] tail = { 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, };
             int step1 = 0;
             int step2 = 0;
             visited[tail[0], tail[1]] = true;
@@ -720,250 +720,107 @@ namespace Advent_of_Code_2022
             for (int i = 0; i < data.Length; i++)
             {
                 string[] check = data[i].Split(" ");
-                if (check[0] == "U")
+                for (int j = 0; j < int.Parse(check[1]); j++)
                 {
-                    for (int j = 0; j < int.Parse(check[1]); j++)
+                    if (check[0] == "U")
                     {
                         head[0] = head[0] - 1;
                         if (head[0] < tail[0] - 1)
-                        {                            
+                        {
                             tail[0] = tail[0] - 1;
                             if (tail[1] != head[1])
                             {
                                 if (tail[1] < head[1]) tail[1]++;
                                 else tail[1]--;
                             }
-                        }                        
-                        visited[tail[0], tail[1]] = true;
-                        for (int k = 2; k < 18; k = k + 2)
-                        {
-                            if (tail[k - 2] < tail[k] - 1)
-                            {
-                                tail[k] = tail[k] - 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] > tail[k + 1] + 1)
-                            {
-                                tail[k + 1] = tail[k + 1] + 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
-                            }
-                            if (tail[k - 2] > tail[k] + 1)
-                            {
-                                tail[k] = tail[k] + 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] < tail[k + 1] - 1)
-                            {
-                                tail[k + 1] = tail[k + 1] - 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
-                            }
                         }
-                        visited2[tail[16], tail[17]] = true;  
                     }
-                }
-                if (check[0] == "R")
-                {
-                    for (int j = 0; j < int.Parse(check[1]); j++)
+                    if (check[0] == "R")
                     {
                         head[1] = head[1] + 1;
                         if (head[1] > tail[1] + 1)
-                        {                            
+                        {
                             tail[1] = tail[1] + 1;
                             if (tail[0] != head[0])
                             {
                                 if (head[0] > tail[0]) tail[0]++;
                                 else tail[0]--;
                             }
-                        }                        
-                        visited[tail[0], tail[1]] = true;
-                        for (int k = 2; k < 18; k = k + 2)
-                        {
-                            if (tail[k - 2] < tail[k] - 1)
-                            {
-                                tail[k] = tail[k] - 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] > tail[k + 1] + 1)
-                            {
-                                tail[k + 1] = tail[k + 1] + 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
-                            }
-                            if (tail[k - 2] > tail[k] + 1)
-                            {
-                                tail[k] = tail[k] + 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] < tail[k + 1] - 1)
-                            {
-                                tail[k + 1] = tail[k + 1] - 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
-                            }
-                            visited2[tail[16], tail[17]] = true;
                         }
                     }
-                }
-                if (check[0] == "D")
-                {
-                    for (int j = 0; j < int.Parse(check[1]); j++)
+                    if (check[0] == "D")
                     {
                         head[0] = head[0] + 1;
                         if (head[0] > tail[0] + 1)
-                        {                            
+                        {
                             tail[0] = tail[0] + 1;
                             if (tail[1] != head[1])
                             {
                                 if (tail[1] < head[1]) tail[1]++;
                                 else tail[1]--;
                             }
-                        }                        
-                        visited[tail[0], tail[1]] = true;
-                        for (int k = 2; k < 18; k = k + 2)
-                        {
-                            if (tail[k - 2] < tail[k] - 1)
-                            {
-                                tail[k] = tail[k] - 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] > tail[k + 1] + 1)
-                            {
-                                tail[k + 1] = tail[k + 1] + 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
-                            }
-                            if (tail[k - 2] > tail[k] + 1)
-                            {
-                                tail[k] = tail[k] + 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] < tail[k + 1] - 1)
-                            {
-                                tail[k + 1] = tail[k + 1] - 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
-                            }
                         }
-                        visited2[tail[16], tail[17]] = true;
                     }
-                }
-                if (check[0] == "L")
-                {
-                    for (int j = 0; j < int.Parse(check[1]); j++)
+                    if (check[0] == "L")
                     {
                         head[1] = head[1] - 1;
                         if (head[1] < tail[1] - 1)
-                        {                            
+                        {
                             tail[1] = tail[1] - 1;
                             if (tail[0] != head[0])
                             {
                                 if (tail[0] < head[0]) tail[0]++;
-                                else tail[0]--;                              
-                            }
-                        }                        
-                        visited[tail[0], tail[1]] = true;
-                        for (int k = 2; k < 18; k = k + 2)
-                        {
-                            if (tail[k - 2] < tail[k] - 1)
-                            {
-                                tail[k] = tail[k] - 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] > tail[k + 1] + 1)
-                            {
-                                tail[k + 1] = tail[k + 1] + 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
-                            }
-                            if (tail[k - 2] > tail[k] + 1)
-                            {
-                                tail[k] = tail[k] + 1;
-                                if (tail[k + 1] != tail[k - 1])
-                                {
-                                    if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
-                                    else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
-                                    else tail[k + 1]--;
-                                }
-                            }
-                            if (tail[k - 1] < tail[k + 1] - 1)
-                            {
-                                tail[k + 1] = tail[k + 1] - 1;
-                                if (tail[k] != tail[k - 2])
-                                {
-                                    if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
-                                    else if (tail[k] < tail[k - 2]) tail[k]++;
-                                    else tail[k]--;
-                                }
+                                else tail[0]--;
                             }
                         }
-                        visited2[tail[16], tail[17]] = true;
                     }
-                }               
+                    visited[tail[0], tail[1]] = true;
+                    for (int k = 2; k < 18; k = k + 2)
+                    {
+                        if (tail[k - 2] < tail[k] - 1)
+                        {
+                            tail[k] = tail[k] - 1;
+                            if (tail[k + 1] != tail[k - 1])
+                            {
+                                if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
+                                else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
+                                else tail[k + 1]--;
+                            }
+                        }
+                        if (tail[k - 1] > tail[k + 1] + 1)
+                        {
+                            tail[k + 1] = tail[k + 1] + 1;
+                            if (tail[k] != tail[k - 2])
+                            {
+                                if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
+                                else if (tail[k] < tail[k - 2]) tail[k]++;
+                                else tail[k]--;
+                            }
+                        }
+                        if (tail[k - 2] > tail[k] + 1)
+                        {
+                            tail[k] = tail[k] + 1;
+                            if (tail[k + 1] != tail[k - 1])
+                            {
+                                if (Math.Abs(tail[k + 1] - tail[k - 1]) > 2) tail[k + 1] = tail[k - 1];
+                                else if (tail[k + 1] < tail[k - 1]) tail[k + 1]++;
+                                else tail[k + 1]--;
+                            }
+                        }
+                        if (tail[k - 1] < tail[k + 1] - 1)
+                        {
+                            tail[k + 1] = tail[k + 1] - 1;
+                            if (tail[k] != tail[k - 2])
+                            {
+                                if (Math.Abs(tail[k] - tail[k - 2]) > 2) tail[k] = tail[k - 2];
+                                else if (tail[k] < tail[k - 2]) tail[k]++;
+                                else tail[k]--;
+                            }
+                        }
+                    }
+                    visited2[tail[16], tail[17]] = true;
+                }
+
             }
 
             for (int i = 0; i < visited.GetLength(0); i++)
