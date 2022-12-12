@@ -368,6 +368,7 @@ namespace Advent_of_Code_2022
                 }
             }
             Console.Write(" Step2 result " + answer);
+            Console.WriteLine();
         }
         public static void Day6()
         {
@@ -917,27 +918,49 @@ namespace Advent_of_Code_2022
             for (int i = 0; i < data.Length; i = i + 7)
             {
                 Monkey M = new Monkey();
+                Monkey M2 = new Monkey();
                 string[] info = data[i + 1].Split(':', ',');
                 for (int j = 1; j < info.Length; j++)
                 {
                     M.items.Add(int.Parse(info[j]));
+                    M2.items.Add(int.Parse(info[j]));
                 }
                 string[] info2 = data[i + 2].Split('=', ' ');
-                if (info2[6] == "old") M.op1 = -1;
-                else M.op1 = int.Parse(info2[6]);
+                if (info2[6] == "old")
+                {
+                    M.op1 = -1;
+                    M2.op1 = -1;
+                }
+                else
+                {
+                    M.op1 = int.Parse(info2[6]);
+                    M2.op1 = int.Parse(info2[6]);
+                }
                 M.operand = info2[7];
-                if (info2[8] == "old") M.op2 = -1;
-                else M.op2 = int.Parse(info2[8]);
+                M2.operand = info2[7];
+                if (info2[8] == "old")
+                {
+                    M.op2 = -1;
+                    M2.op2 = -1;
+                }
+                else
+                {
+                    M.op2 = int.Parse(info2[8]);
+                    M2.op2 = int.Parse(info2[8]);
+                }
                 string[] info3 = data[i + 3].Split(' ');
                 M.divisible = int.Parse(info3[5]);
+                M2.divisible = int.Parse(info3[5]);
                 modulus *= M.divisible;
                 string[] info4 = data[i + 4].Split(' ');
                 M.trueThrow = int.Parse(info4[9]);
+                M2.trueThrow = int.Parse(info4[9]);
                 string[] info5 = data[i + 5].Split(' ');
                 M.falseThrow = int.Parse(info5[9]);
+                M2.falseThrow = int.Parse(info5[9]);
                 monkeys.Add(M);
-                monkeys2.Add(M);
-            }
+                monkeys2.Add(M2);
+            }           
             for (int i = 0; i < 20; i++)
             {
                 for (int j = 0; j < monkeys.Count(); j++)
@@ -1048,8 +1071,10 @@ namespace Advent_of_Code_2022
                 {                    
                     string[] split = pos[i].Split(";");
                     if (int.Parse(split[0]) != 0 && int.Parse(split[0]) != mountain2.GetLength(0) - 1 && int.Parse(split[1]) != 0 && int.Parse(split[1]) != mountain2.GetLength(1) - 1)
-                        if (mountain2[int.Parse(split[0])-1, int.Parse(split[1])] == 'X' && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1])] == 'X' && mountain2[int.Parse(split[0]), int.Parse(split[1]) - 1] == 'X' && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1]) + 1] == 'X') pos.RemoveAt(i);
-                    if(int.Parse(split[0]) == 0 && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1])] == 'X') pos.RemoveAt(i);                    
+                    {
+                        if (mountain2[int.Parse(split[0]) - 1, int.Parse(split[1])] == 'X' && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1])] == 'X' && mountain2[int.Parse(split[0]), int.Parse(split[1]) - 1] == 'X' && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1]) + 1] == 'X') pos.RemoveAt(i);
+                    }
+                    else if (int.Parse(split[0]) == 0 && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1])] == 'X') pos.RemoveAt(i);
                 }
                 int tracker = 0;
                 for (int i = pos.Count() - 1; i > -1; i--)
