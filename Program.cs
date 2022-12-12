@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Metrics;
+﻿using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Intrinsics.X86;
@@ -847,12 +848,12 @@ namespace Advent_of_Code_2022
             return 0;
         }
         public static string CrtCheck(string crt, int cycle, int x)
-        {            
-            if (crt.Length<40 && cycle == x || x == cycle - 1 || x == cycle + 1) return "#";
-            else if (crt.Length < 80 && cycle-40 == x || x == cycle-40 - 1 || x == cycle-40 + 1) return "#";
-            else if (crt.Length < 120 && cycle-80 == x || x == cycle-80 - 1 || x == cycle-80 + 1) return "#";
-            else if (crt.Length < 160 && cycle-120 == x || x == cycle - 120 - 1 || x == cycle - 120 + 1) return "#";
-            else if (crt.Length < 200 && cycle == x - 160 || x == cycle - 160-1 || x == cycle - 160 + 1) return "#";
+        {
+            if (crt.Length < 40 && cycle == x || x == cycle - 1 || x == cycle + 1) return "#";
+            else if (crt.Length < 80 && cycle - 40 == x || x == cycle - 40 - 1 || x == cycle - 40 + 1) return "#";
+            else if (crt.Length < 120 && cycle - 80 == x || x == cycle - 80 - 1 || x == cycle - 80 + 1) return "#";
+            else if (crt.Length < 160 && cycle - 120 == x || x == cycle - 120 - 1 || x == cycle - 120 + 1) return "#";
+            else if (crt.Length < 200 && cycle == x - 160 || x == cycle - 160 - 1 || x == cycle - 160 + 1) return "#";
             else if (crt.Length < 240 && cycle - 200 == x || x == cycle - 200 - 1 || x == cycle - 200 + 1) return "#";
             else return ".";
         }
@@ -862,28 +863,28 @@ namespace Advent_of_Code_2022
             int step1 = 0;
             int x = 1;
             int cycle = 0;
-            string crt="";
-            for(int i = 0; i < data.Length; i++)
+            string crt = "";
+            for (int i = 0; i < data.Length; i++)
             {
-                if(i==0) crt = crt + CrtCheck(crt, cycle, x);
-                string[] check = data[i].Split(" ");                                
+                if (i == 0) crt = crt + CrtCheck(crt, cycle, x);
+                string[] check = data[i].Split(" ");
                 if (check[0] == "noop")
-                {                    
+                {
                     cycle++;
                     step1 = step1 + CycleCheck(cycle, x);
                     crt = crt + CrtCheck(crt, cycle, x);
                 }
-                if (check[0]=="addx")
-                {                  
+                if (check[0] == "addx")
+                {
                     cycle++;
-                    step1 = step1 + CycleCheck(cycle,x);
-                    crt = crt + CrtCheck(crt, cycle, x);                    
+                    step1 = step1 + CycleCheck(cycle, x);
+                    crt = crt + CrtCheck(crt, cycle, x);
                     cycle++;
                     x = x + int.Parse(check[1]);
-                    step1 = step1 + CycleCheck(cycle,x);
+                    step1 = step1 + CycleCheck(cycle, x);
                     crt = crt + CrtCheck(crt, cycle, x);
                 }
-            }       
+            }
             Console.WriteLine();
             Console.WriteLine("Day10");
             Console.WriteLine("Step1 " + step1 + " Step2 ");
@@ -891,7 +892,7 @@ namespace Advent_of_Code_2022
             for (int i = 0; i < crt.Length; i++)
             {
                 if (i % 40 == 0 && i != 0) Console.WriteLine();
-                if(i!=crt.Length-1)Console.Write(crt[i]);
+                if (i != crt.Length - 1) Console.Write(crt[i]);
             }
         }
         public class Monkey
@@ -900,7 +901,7 @@ namespace Advent_of_Code_2022
             public int divisible;
             public int op1;
             public int op2;
-            public string operand="";
+            public string operand = "";
             public int trueThrow;
             public int falseThrow;
             public long counter = 0;
@@ -921,7 +922,7 @@ namespace Advent_of_Code_2022
                 {
                     M.items.Add(int.Parse(info[j]));
                 }
-                string[] info2 = data[i + 2].Split('=', ' ');                
+                string[] info2 = data[i + 2].Split('=', ' ');
                 if (info2[6] == "old") M.op1 = -1;
                 else M.op1 = int.Parse(info2[6]);
                 M.operand = info2[7];
@@ -931,14 +932,14 @@ namespace Advent_of_Code_2022
                 M.divisible = int.Parse(info3[5]);
                 modulus *= M.divisible;
                 string[] info4 = data[i + 4].Split(' ');
-                M.trueThrow = int.Parse(info4[9]);                
+                M.trueThrow = int.Parse(info4[9]);
                 string[] info5 = data[i + 5].Split(' ');
-                M.falseThrow = int.Parse(info5[9]);                
+                M.falseThrow = int.Parse(info5[9]);
                 monkeys.Add(M);
                 monkeys2.Add(M);
             }
             for (int i = 0; i < 20; i++)
-            {                
+            {
                 for (int j = 0; j < monkeys.Count(); j++)
                 {
                     for (int k = 0; k < monkeys[j].items.Count(); k++)
@@ -951,25 +952,25 @@ namespace Advent_of_Code_2022
                         worry = worry / 3;
                         if (worry % monkeys[j].divisible == 0)
                         {
-                            monkeys[monkeys[j].trueThrow].items.Add(worry);                            
+                            monkeys[monkeys[j].trueThrow].items.Add(worry);
                         }
                         else
                         {
-                            monkeys[monkeys[j].falseThrow].items.Add(worry);                            
-                        }                        
+                            monkeys[monkeys[j].falseThrow].items.Add(worry);
+                        }
                     }
                     monkeys[j].items.Clear();
                 }
-            }            
+            }
             long highest = 0;
             for (int i = 0; i < monkeys.Count(); i++)
-            {                
+            {
                 if (monkeys[i].counter > highest)
                 {
                     step1 = monkeys[i].counter * highest;
                     highest = monkeys[i].counter;
                 }
-            }            
+            }
             for (int i = 0; i < 10000; i++)
             {
                 for (int j = 0; j < monkeys2.Count(); j++)
@@ -1005,7 +1006,189 @@ namespace Advent_of_Code_2022
             }
             Console.WriteLine();
             Console.WriteLine("Day11");
-            Console.Write("Step1 " + step1+" step2 "+step2);
+            Console.WriteLine("Step1 " + step1 + " step2 " + step2);
+        }
+        bool ArrayContainsValue(int[,] array, int value)
+        {
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    if (array[i, j] == value)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public static int Day12Calc(char[,] mountain, char[,] mountain2, int[] win, List<string> pos, List<int> partTwoPos, bool CalcAll)
+        {
+            int stepReturn = 10000;
+            int counter = 0;
+            again:
+            for (int i = 0; i < mountain2.GetLength(0); i++)
+            {
+                for (int j = 0; j < mountain2.GetLength(1); j++)
+                {
+                    mountain2[i, j] = ' ';
+                }
+            }
+            if (CalcAll == true)
+            {
+                pos.Clear();
+                pos.Add(partTwoPos[counter].ToString() + ";" + partTwoPos[counter + 1].ToString());
+                counter = counter + 2;
+            }
+            int step = 0;
+            string won = "no";
+            while (won == "no")
+            {
+                for(int i = pos.Count()-1; i > -1; i--)
+                {                    
+                    string[] split = pos[i].Split(";");
+                    if (int.Parse(split[0]) != 0 && int.Parse(split[0]) != mountain2.GetLength(0) - 1 && int.Parse(split[1]) != 0 && int.Parse(split[1]) != mountain2.GetLength(1) - 1)
+                        if (mountain2[int.Parse(split[0])-1, int.Parse(split[1])] == 'X' && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1])] == 'X' && mountain2[int.Parse(split[0]), int.Parse(split[1]) - 1] == 'X' && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1]) + 1] == 'X') pos.RemoveAt(i);
+                    if(int.Parse(split[0]) == 0 && mountain2[int.Parse(split[0]) + 1, int.Parse(split[1])] == 'X') pos.RemoveAt(i);                    
+                }
+                int tracker = 0;
+                for (int i = pos.Count() - 1; i > -1; i--)
+                {
+                    string[] split = pos[i].Split(";");
+                    if (int.Parse(split[0]) + 1 != mountain.GetLength(0))
+                    {
+                        if (mountain[int.Parse(split[0]), int.Parse(split[1])] - mountain[int.Parse(split[0]) + 1, int.Parse(split[1])] > -2)
+                        {
+                            string info = "";
+                            int calc = int.Parse(split[0]) + 1;
+                            if (win[0] == calc && win[1] == int.Parse(split[1]))
+                            {
+                                won = "yes!";
+                                if (step < stepReturn) stepReturn = step + 1;
+                            }
+                            info = calc.ToString() + ";";
+                            info = info + split[1];
+                            pos.Add(info);
+                            if (mountain2[calc, int.Parse(split[1])] == ' ')
+                            {
+                                mountain2[calc, int.Parse(split[1])] = 'X';
+                                tracker++;
+                            }
+                        }
+                    }
+                    if (int.Parse(split[0]) - 1 != -1)
+                    {
+                        if (mountain[int.Parse(split[0]), int.Parse(split[1])] - mountain[int.Parse(split[0]) - 1, int.Parse(split[1])] > -2)
+                        {
+                            string info = "";
+                            int calc = int.Parse(split[0]) - 1;
+                            if (win[0] == calc && win[1] == int.Parse(split[1]))
+                            {
+                                won = "yes!";
+                                if (step < stepReturn) stepReturn = step + 1;
+                            }
+                            info = calc.ToString() + ";";
+                            info = info + split[1];
+                            pos.Add(info);                            
+                            if (mountain2[calc, int.Parse(split[1])] == ' ')
+                            {
+                                mountain2[calc, int.Parse(split[1])] = 'X';
+                                tracker++;
+                            }
+                        }
+                    }
+                    if (int.Parse(split[1]) + 1 != mountain.GetLength(1))
+                    {
+                        if (mountain[int.Parse(split[0]), int.Parse(split[1])] - mountain[int.Parse(split[0]), int.Parse(split[1]) + 1] > -2)
+                        {
+                            string info = "";
+                            int calc = int.Parse(split[1]) + 1;
+                            if (win[1] == calc && win[0] == int.Parse(split[0]))
+                            {
+                                won = "yes!";
+                                if (step < stepReturn) stepReturn = step+1;
+                            }
+                            info = split[0] + ";";
+                            info = info + calc.ToString();
+                            pos.Add(info);                            
+                            if (mountain2[int.Parse(split[0]), calc] == ' ')
+                            {
+                                mountain2[int.Parse(split[0]), calc] = 'X';
+                                tracker++;
+                            }
+                        }
+                    }
+                    if (int.Parse(split[1]) - 1 != -1)
+                    {
+                        if (mountain[int.Parse(split[0]), int.Parse(split[1])] - mountain[int.Parse(split[0]), int.Parse(split[1]) - 1] > -2)
+                        {
+                            string info = "";
+                            int calc = int.Parse(split[1]) - 1;
+                            if (win[1] == calc && win[0] == int.Parse(split[0]))
+                            {
+                                won = "yes!";
+                                if (step < stepReturn) stepReturn = step + 1;
+                            }
+                            info = split[0] + ";";
+                            info = info + calc.ToString();
+                            pos.Add(info);                            
+                            if (mountain2[int.Parse(split[0]), calc] == ' ')
+                            {
+                                mountain2[int.Parse(split[0]), calc] = 'X';
+                                tracker++;
+                            }
+                        }
+                    }
+                }
+                if (tracker == 0) won = "stuck";
+                pos = pos.Distinct().ToList();
+                step++;                
+            }            
+            if (counter < partTwoPos.Count() && CalcAll==true) goto again;
+            return stepReturn;
+        }
+        public static void Day12()
+        {
+            String[] data = File.ReadAllLines("Day12.txt");
+            char[,] mountain = new char[data.Length, data[0].Length];
+            char[,] mountain2 = new char[data.Length, data[0].Length];
+            List<string> pos = new List<string>();                        
+            int step1 = 0; int step2 = 0;
+            int[] win = new int[2];
+            List<int> partTwoPos = new List<int>();
+            for (int i = 0; i < data.Length; i++)
+            {
+                for (int j = 0; j < data[i].Length; j++)
+                {
+                    mountain[i, j] = data[i][j];
+                    if (data[i][j] == 'S')
+                    {
+                        string info ="";
+                        mountain[i, j] = 'a';
+                        info = i.ToString() +";" ;
+                        info = info+ j.ToString();
+                        pos.Add(info);
+                    }
+                    else if (data[i][j] == 'E')
+                    {
+                        mountain[i, j] = 'z';
+                        win[0] = i;
+                        win[1] = j;
+                    }
+                    else if (data[i][j]=='a')
+                    {
+                        mountain[i, j] = data[i][j];
+                        partTwoPos.Add(i);
+                        partTwoPos.Add(j);
+                    }
+                    else mountain[i, j] = data[i][j];
+                }
+            }
+            step1 = Day12Calc(mountain, mountain2, win, pos, partTwoPos, false);                       
+            step2= Day12Calc(mountain, mountain2, win, pos, partTwoPos, true);  
+            Console.WriteLine();
+            Console.WriteLine("Day12");
+            Console.WriteLine("Step1 " + step1 + " step2 " + step2);
         }
         static void Main(string[] args)
         {
@@ -1021,7 +1204,8 @@ namespace Advent_of_Code_2022
             Day8PartTwo();
             Day9();
             Day10();
-            Day11();            
+            Day11();
+            Day12();
         }
     }
 }
